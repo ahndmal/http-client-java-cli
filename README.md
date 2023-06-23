@@ -35,3 +35,17 @@ Build as native executable:
 - ``` --auth ``` or ``` -A ``` - authorization as 'USER:PASSWORD'. e.g. ``` --auth admin:admin ```
 - ``` --headers ``` - request Headers in format of: ``` key:value, key2:value2 ```
 - ``` --query ``` - query parameters for the request.  will be passed as ``` ?query= ```
+
+## Examples
+
+### GET
+
+```bash
+    jcurl --url http://example.com --method GET
+```
+
+### POST
+
+```bash
+    jcurl --url http://example.com --method POST --body '{"name": "Vasyl"}' --headers 'Content-Type: application/json'
+```

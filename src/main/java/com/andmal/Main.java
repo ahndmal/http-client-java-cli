@@ -69,6 +69,7 @@ public class Main {
                     HttpRequest request = reqBuilder.GET().uri(URI.create(url)).build();
                    var response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
                     response.thenApply(resp -> {
+                        System.out.println("[ \uD83D\uDE3B ] \u001b[33mheaders:\u001b[0m");
                         resp.headers().map().forEach((key, value) -> System.out.printf("%s : %s \r\n", key, value));
                         System.out.println(resp.body());
                         return "";
@@ -91,7 +92,19 @@ public class Main {
                 }
                 break;
             case "PUT":
-                //todo
+                HttpRequest put = reqBuilder
+                        .PUT(HttpRequest.BodyPublishers.ofString(body))
+                        .uri(URI.create(url))
+                        .build();
+                try {
+                    HttpResponse<String> resp = client.send(put, HttpResponse.BodyHandlers.ofString());
+                    resp.headers().map().forEach((key, value) ->
+                            System.out.printf("\u001b[32m %s\u001b[0m : \u001b[33m%s\u001b[0m \r\n", key, value));
+                    System.out.println("\n");
+                    System.out.println(resp.body());
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
         }
 
 

@@ -20,7 +20,6 @@ graalvmNative {
             mainClass.set("com.andmal.Main")
             verbose.set(true)
         }
-
     }
 }
 
