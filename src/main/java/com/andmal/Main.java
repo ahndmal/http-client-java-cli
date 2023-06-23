@@ -12,8 +12,6 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(">>> Initiating request");
-
         String method = "";
         String auth = "";
         String url = "";
@@ -57,9 +55,13 @@ public class Main {
         }
 
         if (Arrays.asList(args).contains("--auth") || Arrays.asList(args).contains("-A")) {
-            var TOKEN = Base64.getEncoder().encodeToString(String.format("%s:%s", auth.split(":")[0], auth.split(":")[1]).getBytes());
-            reqBuilder.header("Authorization", "Basic" + TOKEN);
+            auth = auth.replace("'", "").replace("\"", "");
+            var TOKEN = Base64.getEncoder().encodeToString(
+                    String.format("%s:%s", auth.split(":")[0], auth.split(":")[1]).getBytes());
+            reqBuilder.header("Authorization", "Basic " + TOKEN);
         }
+
+        System.out.println("[ \uD83D\uDE3A JCURL \uD83D\uDE3A ] Initiating request");
 
         switch (method) {
             case "GET":
@@ -72,7 +74,7 @@ public class Main {
                         return "";
                     }).get();
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    System.out.println("\uD83D\uDE3F \uD83D\uDE3F \uD83D\uDE3F. " + e.getMessage());
                 }
                 break;
             case "POST":
@@ -80,9 +82,8 @@ public class Main {
                         .POST(HttpRequest.BodyPublishers.ofString(body))
                         .uri(URI.create(url))
                         .build();
-                HttpResponse<String> response = null;
                 try {
-                    var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
                     resp.headers().map().forEach((key, value) -> System.out.printf("%s : %s \r\n", key, value));
                     System.out.println(resp.body());
                 } catch (IOException | InterruptedException e) {
