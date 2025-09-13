@@ -25,7 +25,7 @@ graalvmNative {
 
 java {
     toolchain {
-        version = JavaVersion.VERSION_19
+        version = JavaVersion.VERSION_24
     }
 }
 
